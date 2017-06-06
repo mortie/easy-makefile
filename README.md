@@ -44,7 +44,8 @@ GNU/Linux systems).
 
 ## Slightly bigger example
 
-The `example/` directory contains a small example project.
+The [example directory](https://github.com/mortie/easy-makefile/tree/master/example)
+contains a small example project.
 
 ## Variables
 

@@ -1,5 +1,10 @@
 TARGET=example
 
+# Find .c files in src/
+# These are the default values, but are included for completeness
+SRC=src
+EXT=.c
+
 # Link with the math library for sqrt
 LINK=m
 
