@@ -42,6 +42,10 @@ Here, we set the file extension to .cc (the UNIX convention for C++ files), and
 set the compiler to `$(CXX)`, which is the default C++ compiler (usually g++ on
 GNU/Linux systems).
 
+## Slightly bigger example
+
+The `example/` directory contains a small example project.
+
 ## Variables
 
 ### TARGET
