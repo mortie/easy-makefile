@@ -24,7 +24,7 @@
 # LIBS: libraries to statically link with: libfoo.a
 #
 # DEPS: additional targets to run before the $(TARGET) step
-# JUNK: additional files to be cleaned by th clean target
+# JUNK: additional files to be cleaned by the clean target
 
 include conf.mk
 
