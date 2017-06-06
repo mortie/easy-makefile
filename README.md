@@ -39,7 +39,7 @@ TARGET=example-program
 
 Here, we set the file extension to .cc (the UNIX convention for C++ files).
 Instesad of `$(CC)`, the Makefile will now use `$(CXX)`, which is a C++
-compiler (generally C++ on GNU/Linux systems).
+compiler (generally g++ on GNU/Linux systems).
 
 ## Slightly bigger example
 
