@@ -2,7 +2,8 @@
 # TARGET: compilation target
 #
 # TOOLCHAIN: prefix for toolchain: TOOLCHAIN=aarch64-linux-gnu-
-# CC: what compiler to use
+# COMPILER: what compiler to use
+#     default: $(CC) for EXT=.c, $(CXX) for EXT=.cc
 #
 # FILES: list of input files
 #     default: all files with extension $(EXT) in $(SRC)
@@ -18,8 +19,9 @@
 #
 # WARN: warning flags
 #     default: all pedantic
-# LINK: libraries to link with
+# LINK: libraries to dynamically link with
 # INCLUDE: include directories
+# LIBS: libraries to statically link with: libfoo.a
 #
 # DEPS: additional targets to run before the $(TARGET) step
 # JUNK: additional files to be cleaned by th clean target
@@ -44,7 +46,14 @@ endif
 ifeq ($(FILES),)
   FILES=$(shell find $(SRC) -name '*$(EXT)' | sed 's/^.\///')
 endif
-CC:=$(TOOLCHAIN)$(CC)
+ifeq ($(COMPILER),)
+  ifeq ($(EXT),.cc)
+    COMPILER=$(CXX)
+  else
+    COMPILER=$(CC)
+  endif
+endif
+COMPILER:=$(TOOLCHAIN)$(COMPILER)
 
 #
 # Find .o and .d files
@@ -68,17 +77,23 @@ FLAGS:=$(FLAGS) \
 	$(patsubst %,-W%,$(WARN)) \
 	$(patsubst %,-l%,$(LINK)) \
 	$(patsubst %,-L%,$(INCLUDE))
+ifeq ($(EXT),.cc)
+  FLAGS:=$(FLAGS) $(CXXFLAGS)
+else
+  FLAGS:=$(FLAGS) $(CFLAGS)
+endif
 ifeq ($(DEBUG),1)
   FLAGS:=$(FLAGS) $(FLAGS_DBG)
 else
   FLAGS:=$(FLAGS) $(FLAGS_NDBG)
 endif
+FLAGS:=$(strip $(FLAGS))
 
 #
 # Compile the binary
 #
-$(TARGET): $(OFILES) $(DEPS)
-	$(CC) -o $(TARGET) $(OFILES)
+$(TARGET): $(OFILES) $(LIBS) $(DEPS)
+	$(COMPILER) $(FLAGS) -o $(TARGET) $(OFILES) $(LIBS)
 	@$(call log,"Created",$(TARGET))
 
 #
@@ -94,14 +109,14 @@ clean:
 dep/%.d: %$(EXT)
 	@mkdir -p $(@D)
 	@printf $(dir obj/$*) > $@
-	@$(CC) -MM $< -o -  >> $@
+	@$(COMPILER) -MM $< -o -  >> $@
 
 #
 # Create .o files
 #
 obj/%.o: %$(EXT)
 	@mkdir -p $(@D)
-	$(CC) $(strip $(FLAGS)) -o $@ -c $<
+	$(COMPILER) $(FLAGS) -o $@ -c $<
 	@$(call log,"Created",$@)
 
 #
@@ -112,3 +127,5 @@ obj/%.o: %$(EXT)
 ifneq ($(MAKECMDGOALS),clean)
   -include $(DFILES)
 endif
+
+.PHONY: clean

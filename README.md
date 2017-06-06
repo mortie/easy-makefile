@@ -33,14 +33,13 @@ To compile C++ instead of C:
 
 `conf.mk`:
 ```
-CC=$(CXX)
 EXT=.cc
 TARGET=example-program
 ```
 
-Here, we set the file extension to .cc (the UNIX convention for C++ files), and
-set the compiler to `$(CXX)`, which is the default C++ compiler (usually g++ on
-GNU/Linux systems).
+Here, we set the file extension to .cc (the UNIX convention for C++ files).
+Instesad of `$(CC)`, the Makefile will now use `$(CXX)`, which is a C++
+compiler (generally C++ on GNU/Linux systems).
 
 ## Slightly bigger example
 
@@ -75,14 +74,11 @@ Default value: `.c`
 
 Default value: `src`
 
-### CC
+### COMPILER
 
-`CC` is the compiler. For C, you can leave it as it is. For C++, set it to
-`$(CXX)` - the `CXX` variable is predefined by make, and is generally the
-preferred C++ compiler.
-
-Default: a C compiler. Which one depends on your system, but it generally means
-`cc`, which on GNU/Linux systems is a symlink to `gcc`.
+`COMPILER` is the compiler. This defaults to `$(CXX)` if `EXT` is `.cc`, and
+`$(CC)` otherwise. You generally don't need to change this yourself, as long as
+you use the extension `.cc` for C++ and `.c` for C.
 
 ### WARN
 
@@ -100,6 +96,11 @@ library for example (`libm.so`): `LINK=m` (expands to `-lm`)
 `INCLUDE` is a list of directories to append to your include search path. To
 include a directory called `headers`: `INCLUDE=headers` (expands to
 `-Lheaders`)
+
+### LIBS
+
+`LIBS` is a list of statically linked libraries (generally `libfoo.a`), which
+the final binary will be linked with.
 
 ### FLAGS
 
