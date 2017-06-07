@@ -62,15 +62,6 @@ OFILES=$(patsubst %$(EXT),obj/%.o,$(FILES))
 DFILES=$(patsubst %$(EXT),dep/%.d,$(FILES))
 
 #
-# Log function for pretty logging
-#
-col_dim=\e[0;34m
-col_bright=\e[1;95m
-col_arg=\e[0;92m
-col_end=\e[0m
-log=bash -c 'echo -e "$(col_dim)[$(col_bright)i$(col_dim)]$(col_end) $(1) $(col_arg)$(2)$(col_end)"'
-
-#
 # Create FLAGS based on a bunch of variables
 #
 FLAGS:=$(FLAGS) \
@@ -94,7 +85,6 @@ FLAGS:=$(strip $(FLAGS))
 #
 $(TARGET): $(OFILES) $(LIBS) $(DEPS)
 	$(COMPILER) $(FLAGS) -o $(TARGET) $(OFILES) $(LIBS)
-	@$(call log,"Created",$(TARGET))
 
 #
 # Cleanup
@@ -117,7 +107,6 @@ dep/%.d: %$(EXT)
 obj/%.o: %$(EXT)
 	@mkdir -p $(@D)
 	$(COMPILER) $(FLAGS) -o $@ -c $<
-	@$(call log,"Created",$@)
 
 #
 # Include .d files if we're not in make clean
