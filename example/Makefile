@@ -1,4 +1,4 @@
-# Variables from conf.mk:
+# Variables from config.mk:
 # TARGET: compilation target
 #
 # TOOLCHAIN: prefix for toolchain: TOOLCHAIN=aarch64-linux-gnu-
@@ -26,7 +26,7 @@
 # DEPS: additional targets to run before the $(TARGET) step
 # JUNK: additional files to be cleaned by the clean target
 
-include conf.mk
+include config.mk
 
 #
 # Defaults

@@ -1,7 +1,7 @@
 # Easy Makefile
 
 This is a makefile designed to be dropped in to a project and for the most part
-"just work" after a little bit of configuration in a `conf.mk` file.
+"just work" after a little bit of configuration in a `config.mk` file.
 
 Make is a great tool, but I remember how hard it was to learn. It's very
 different from most other build systems. It's my hope that this file can be
@@ -20,7 +20,7 @@ wget https://raw.githubusercontent.com/mortie/easy-makefile/master/Makefile
 
 and create a config file for it:
 
-`conf.mk`:
+`config.mk`:
 ```
 TARGET=example-program
 ```
@@ -31,7 +31,7 @@ the the necessary files will be recompiled the next time you run `make`.
 
 To compile C++ instead of C:
 
-`conf.mk`:
+`config.mk`:
 ```
 EXT=.cc
 TARGET=example-program
