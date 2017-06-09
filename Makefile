@@ -58,8 +58,8 @@ COMPILER:=$(TOOLCHAIN)$(COMPILER)
 #
 # Find .o and .d files
 #
-OFILES=$(patsubst %$(EXT),obj/%.o,$(FILES))
-DFILES=$(patsubst %$(EXT),dep/%.d,$(FILES))
+OFILES=$(patsubst %$(EXT),obj/$(TARGET)/%.o,$(FILES))
+DFILES=$(patsubst %$(EXT),dep/$(TARGET)/%.d,$(FILES))
 
 #
 # Create FLAGS based on a bunch of variables
@@ -96,7 +96,7 @@ clean:
 #
 # Create .d files
 #
-dep/%.d: %$(EXT)
+dep/$(TARGET)/%.d: %$(EXT)
 	@mkdir -p $(@D)
 	@printf $(dir obj/$*) > $@
 	@$(COMPILER) $(FLAGS) -MM $< -o -  >> $@
@@ -104,7 +104,7 @@ dep/%.d: %$(EXT)
 #
 # Create .o files
 #
-obj/%.o: %$(EXT)
+obj/$(TARGET)/%.o: %$(EXT)
 	@mkdir -p $(@D)
 	$(COMPILER) $(FLAGS) -o $@ -c $<
 

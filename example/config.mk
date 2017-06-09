@@ -14,10 +14,11 @@ FLAGS_NDBG=-O3
 # Enable lots of warnings, and treat warnings as errors
 WARN=all pedantic extra error
 
-# If we compile with `make ARM=1`, cross compile for arm64.
+# If we compile with `make ARCH=arm64`, cross compile for arm64.
 # This is usually not necessary unless you specifically want to support
 # cross compiling for ARM out of the box.
-ifeq ($(ARM),1)
+ifeq ($(ARCH),arm64)
   TOOLCHAIN=aarch64-linux-gnu-
   CC=gcc
+  TARGET:=$(TARGET)-arm64
 endif
