@@ -95,7 +95,7 @@ library for example (`libm.so`): `LINK=m` (expands to `-lm`)
 
 `INCLUDE` is a list of directories to append to your include search path. To
 include a directory called `headers`: `INCLUDE=headers` (expands to
-`-Lheaders`)
+`-Iheaders`)
 
 ### LIBS
 

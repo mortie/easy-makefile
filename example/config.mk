@@ -9,7 +9,7 @@ EXT=.c
 LINK=m
 
 # Heavily optimize when not in debug mode
-FLAGS_NDBG=-o3
+FLAGS_NDBG=-O3
 
 # Enable lots of warnings, and treat warnings as errors
 WARN=all pedantic extra error

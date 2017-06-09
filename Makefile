@@ -67,7 +67,7 @@ DFILES=$(patsubst %$(EXT),dep/%.d,$(FILES))
 FLAGS:=$(FLAGS) \
 	$(patsubst %,-W%,$(WARN)) \
 	$(patsubst %,-l%,$(LINK)) \
-	$(patsubst %,-L%,$(INCLUDE))
+	$(patsubst %,-I%,$(INCLUDE))
 ifeq ($(EXT),.cc)
   FLAGS:=$(FLAGS) $(CXXFLAGS)
 else
@@ -99,7 +99,7 @@ clean:
 dep/%.d: %$(EXT)
 	@mkdir -p $(@D)
 	@printf $(dir obj/$*) > $@
-	@$(COMPILER) -MM $< -o -  >> $@
+	@$(COMPILER) $(FLAGS) -MM $< -o -  >> $@
 
 #
 # Create .o files
