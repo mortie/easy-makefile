@@ -66,7 +66,6 @@ DFILES=$(patsubst %$(EXT),dep/$(TARGET)/%.d,$(FILES))
 #
 FLAGS:=$(FLAGS) \
 	$(patsubst %,-W%,$(WARN)) \
-	$(patsubst %,-l%,$(LINK)) \
 	$(patsubst %,-I%,$(INCLUDE))
 ifeq ($(EXT),.cc)
   FLAGS:=$(FLAGS) $(CXXFLAGS)
@@ -80,11 +79,13 @@ else
 endif
 FLAGS:=$(strip $(FLAGS))
 
+LINK:=$(patsubst %,-l%,$(LINK))
+
 #
 # Compile the binary
 #
-$(TARGET): $(OFILES) $(LIBS) $(DEPS)
-	$(COMPILER) $(FLAGS) -o $(TARGET) $(OFILES) $(LIBS)
+$(TARGET): $(LIBS) $(OFILES) $(DEPS)
+	$(COMPILER) -o $(TARGET) $(OFILES) $(LIBS) $(FLAGS) $(LINK)
 
 #
 # Cleanup
