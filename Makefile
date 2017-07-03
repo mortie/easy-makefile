@@ -84,13 +84,14 @@ LINK:=$(patsubst %,-l%,$(LINK))
 #
 # Compile the binary
 #
-$(TARGET): $(LIBS) $(OFILES) $(DEPS)
+$(TARGET): $(LIBS) $(OFILES)
 	$(COMPILER) -o $(TARGET) $(OFILES) $(LIBS) $(FLAGS) $(LINK)
 
 #
 # Cleanup
 #
 clean:
+	echo cleaning
 	rm -rf obj dep
 	rm -f $(TARGET) $(JUNK)
 
@@ -99,15 +100,13 @@ clean:
 #
 dep/$(TARGET)/%.d: %$(EXT)
 	@mkdir -p $(@D)
-	@printf $(dir obj/$*) > $@
-	@$(COMPILER) $(FLAGS) -MM $< -o -  >> $@
+	@printf $(dir obj/$(TARGET)/$*) > $@
 
-#
-# Create .o files
-#
-obj/$(TARGET)/%.o: %$(EXT)
-	@mkdir -p $(@D)
-	$(COMPILER) $(FLAGS) -o $@ -c $<
+	@# Generate deps and write to file. If creating deps fails
+	@# ((e.g an #include which refers to a file which doesn't exist),
+	@# remove the dep file. The `&& break` is to make the build still
+	@# fail; `rm $@` returns exit code 0.
+	@$(COMPILER) $(FLAGS) -MM $< -o - >> $@ || rm -f "$@" && break
 
 #
 # Include .d files if we're not in make clean
@@ -117,5 +116,12 @@ obj/$(TARGET)/%.o: %$(EXT)
 ifneq ($(MAKECMDGOALS),clean)
   -include $(DFILES)
 endif
+
+#
+# Create .o files
+#
+obj/$(TARGET)/%.o: %$(EXT) dep/$(TARGET)/%.d
+	@mkdir -p $(@D)
+	$(COMPILER) $(FLAGS) -o $@ -c $<
 
 .PHONY: clean
